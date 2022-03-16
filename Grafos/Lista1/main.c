@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include "Grafo.h"
 
-int ponderado = 0;
+
 
 void demonstracao();
 Grafo *criacaoDoGRafo();
@@ -10,6 +10,7 @@ int inserirNoGrafo(Grafo *grafico);
 
 
 
+int ponderado = 0;
 int main()
 {
   demonstracao();
@@ -22,14 +23,11 @@ int main()
   else
   {
 
-    if (ponderado == 1)
-    {
+  
       imprimeGrafoLista(grafo);
-    }
-    else
-    {
-      imprimeGrafomatriz(grafo);
-    }
+   
+      //imprimeGrafomatriz(grafo);
+    
     coletarLixo(grafo);
   }
 
@@ -77,10 +75,11 @@ Grafo *criacaoDoGRafo()
 int inserirNoGrafo(Grafo *grafico)
 {
   int saber = 0;
-  colocarValores(grafico, 0, 1, 0, 0);
+  colocarValores(grafico, 0, 1, 1, 0);
+  colocarValores(grafico, 1, 0, 0, 0);
   colocarValores(grafico, 1, 3, 0, 0);
   colocarValores(grafico, 1, 2, 0, 0);
-  colocarValores(grafico, 2, 4, 0, 0);
+  colocarValores(grafico, 2, 4, 1, 0);
   colocarValores(grafico, 3, 2, 0, 0);
   colocarValores(grafico, 3, 4, 0, 0);
   saber = colocarValores(grafico, 4, 1, 0, 0);

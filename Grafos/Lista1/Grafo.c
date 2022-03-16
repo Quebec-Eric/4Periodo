@@ -13,6 +13,7 @@ struct grafo
     int *grau;
 };
 
+Grafo *criarGrafo(int vertice, int grau, int ponderado)
 {
 
     Grafo *novoGrafico;
@@ -184,9 +185,10 @@ void coletarLixo(Grafo *grafico)
             free(grafico->pesos);
         }
         free(grafico->grau);
-        free(grafico->vertices);
+        //free(grafico->vertices);
         free(grafico);
-        if(grafico==NULL){
+        if (grafico == NULL)
+        {
             printf("Grafico desalocado da memoria");
         }
     }
