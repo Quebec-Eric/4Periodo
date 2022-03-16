@@ -99,9 +99,10 @@ void imprimeGrafoLista(Grafo *grafico)
         for (int j = 0; j < grafico->grau[i]; j++)
         {
             if (grafico->ponderado)
-                printf("%d(%.2f), ", grafico->arestas[i][j], grafico->pesos[i][j]);
+                printf("V[%d] Peso(%.2f), ", grafico->arestas[i][j], grafico->pesos[i][j]);
             else
-                printf("%d, ", grafico->arestas[i][j]);
+                printf("[%d], ", grafico->arestas[i][j]);
+                 //printf("--> ");
         }
         printf("\n");
     }
@@ -113,10 +114,11 @@ void imprimeGrafomatriz(Grafo *grafico)
     {
         return;
     }
-
+    printf("   ");
     for (int i = 0; i < grafico->vertices; i = i + 1)
     {
-        printf("\t%d", i);
+         
+        printf("%d\t", i);
     }
     printf("\n");
     for (int i = 0; i < grafico->vertices; i = i + 1)
