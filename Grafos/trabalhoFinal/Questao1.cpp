@@ -2,63 +2,75 @@
 #include <list>
 #include <stack>
 using namespace std;
-
+int comunidade=0;
+//inicio Classe Grafo
 class Grafo
 {
 
 public:
+    //lista onde iremos colocar as arestas
     list<int> *ArestaDeAdjacencia;
     int quantidadeVertices;
+
+    // funcao para adicionar as arestas na lista
     void AdicionandoAresta(int verticeDeSaida, int VerticeDeChegada)
     {
         ArestaDeAdjacencia[verticeDeSaida].push_back(VerticeDeChegada);
     }
+
+    //Construtor 
     Grafo(int quantidadeDeVertices)
     {
         this->quantidadeVertices = quantidadeDeVertices;
         ArestaDeAdjacencia = new list<int>[quantidadeDeVertices];
     }
 
-    void EmpilhandoAPilha(int v, bool visitado[], stack<int> &Pilha)
+    //Funcao de empilihar o vertice onde ainda nao foi visitado
+    void EmpilhandoAPilha(int vertice, bool visitado[], stack<int> &Pilha)
     {
-        visitado[v] = true;
+        visitado[vertice] = true;
         list<int>::iterator i;
-        for (i = ArestaDeAdjacencia[v].begin(); i != ArestaDeAdjacencia[v].end(); ++i)
+        for (i = ArestaDeAdjacencia[vertice].begin(); i != ArestaDeAdjacencia[vertice].end(); ++i)
             if (!visitado[*i])
             {
                 EmpilhandoAPilha(*i, visitado, Pilha);
             }
 
-        Pilha.push(v);
+        Pilha.push(vertice);
     }
 
-    void BuscaPorProfundidade(int v, bool visitado[])
+    // Fazer a busca em profundidade
+    void BuscaPorProfundidade(int vertice, bool visitado[])
     {
-        visitado[v] = true;
-        cout << v << " ";
+        visitado[vertice] = true;
+        cout << "Comunidade ("<< comunidade<<") "<< "Pessoa ("<<vertice+1 << ")  "<< endl;
         list<int>::iterator i;
-        for (i = ArestaDeAdjacencia[v].begin(); i != ArestaDeAdjacencia[v].end(); ++i)
+        for (i = ArestaDeAdjacencia[vertice].begin(); i != ArestaDeAdjacencia[vertice].end(); ++i)
             if (!visitado[*i])
             {
                 BuscaPorProfundidade(*i, visitado);
             }
+           
     }
 
+    //Funcao para fazer o grafico transposto
+    // que e o grafo onde mudamos a direcao das arestas
     Grafo FazerGrafoTransposto()
     {
-        Grafo g(quantidadeVertices);
+        Grafo graficoTran(quantidadeVertices);
         for (int v = 0; v < quantidadeVertices; v++)
         {
             list<int>::iterator i;
             for (i = ArestaDeAdjacencia[v].begin(); i != ArestaDeAdjacencia[v].end(); ++i)
             {
-                g.ArestaDeAdjacencia[*i].push_back(v);
+                graficoTran.ArestaDeAdjacencia[*i].push_back(v);
             }
         }
-        return g;
+        return graficoTran;
     }
 };
 
+//Funcao para mostrarmos a matriz
 void MostrarMatriz(int matriz[15][15])
 {
     std::cout << "Matriz :" << endl;
@@ -67,13 +79,14 @@ void MostrarMatriz(int matriz[15][15])
         cout << i << ": ";
         for (int z = 0; z < 15; z++)
         {
-            cout << matriz[i][z] << " ";
+            cout << matriz[i][z] <<",";
         }
 
         cout << endl;
     }
 }
 
+//Funcao que utilizamos para mudar a matriz para uma aresta simples
 Grafo MatrizParaAresta(int matriz[15][15], int tamanho, Grafo grafo)
 {
 
@@ -91,6 +104,8 @@ Grafo MatrizParaAresta(int matriz[15][15], int tamanho, Grafo grafo)
 
     return grafo;
 }
+
+//Funcao para negar todos os vertices visitados
 bool *NegarVesticesVisitados(bool visitado[], Grafo grafo)
 {
     for (int i = 0; i < grafo.quantidadeVertices; i++)
@@ -100,6 +115,7 @@ bool *NegarVesticesVisitados(bool visitado[], Grafo grafo)
     return visitado;
 }
 
+//Funcao para mostrar na tela os componentres 
 void MostrarNaTela(Grafo grafo, Grafo tranposto, stack<int> &Pilha, bool visitado[])
 {
     while (Pilha.empty() == NULL)
@@ -110,10 +126,13 @@ void MostrarNaTela(Grafo grafo, Grafo tranposto, stack<int> &Pilha, bool visitad
         {
             tranposto.BuscaPorProfundidade(valor, visitado);
             cout << endl;
+             comunidade++;
         }
     }
 }
 
+
+//funcao que ira empilhar a pilha e chamar a funcao de fazer o grafo tranposto
 void Empilhar(Grafo grafo)
 {
     bool *visitados = new bool[grafo.quantidadeVertices];
@@ -132,6 +151,7 @@ void Empilhar(Grafo grafo)
     MostrarNaTela(grafo, transposto, Pilha, visitados);
 }
 
+//Funcao que chama as funcao
 void Fazerex(int matriz[15][15], int tamanho)
 {
     Grafo grafo(tamanho);
@@ -139,6 +159,7 @@ void Fazerex(int matriz[15][15], int tamanho)
     Empilhar(grafo);
 }
 
+//entrada do programa funcao main
 int main()
 {
     /*

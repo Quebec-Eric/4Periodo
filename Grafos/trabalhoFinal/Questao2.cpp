@@ -4,6 +4,8 @@
 #include <string.h>
 using namespace std;
 int variavelglobal = 0;
+
+// Funcao de busca em largura 
 bool BuscaEmLargura(int grafoResifual[6][6], int tamanho, int valores[], int saberCaminho[])
 {
     bool saberQuemFoiVisitado[tamanho];
@@ -42,8 +44,8 @@ bool BuscaEmLargura(int grafoResifual[6][6], int tamanho, int valores[], int sab
 
     return false;
 }
-
-int FordFulkeson(int matriz[6][6], int valores[], int tamanho)
+//Fazer o fluxo com o grafico , para quando achar o caminho fazer o grafo residual e colocar todo o fluxo de 1 e para cada vertice que chegar no vertice desejado , fazer com que aquele caminho seja considerado como fluxo maximo
+int Fazerfluxo(int matriz[6][6], int valores[], int tamanho)
 {
     int grafoResidual[6][6];
 
@@ -92,6 +94,7 @@ int FordFulkeson(int matriz[6][6], int valores[], int tamanho)
     return quantidadeMaxima;
 }
 
+//pegar inputs
 int Pegarvalores(string fala)
 {
     int resposta = 0;
@@ -99,13 +102,16 @@ int Pegarvalores(string fala)
     std::cin >> resposta;
     return resposta;
 }
-void addEdge(vector<int> adj[], int u, int v)
+
+// Funcao para adicionar o caminho de ida e o ultimo
+void AdicionarCaminho(vector<int> adjacente[], int u, int v)
 {
-    adj[u].push_back(v);
-    adj[v].push_back(u);
+    adjacente[u].push_back(v);
+    adjacente[v].push_back(u);
 }
 
-void printGraph(vector<int> adj[], int V)
+//funcao printar o grafico
+void printGrafico(vector<int> adj[], int V)
 {
     std::cout << "\n Lista de Adjacencia " << endl;
 
@@ -119,6 +125,22 @@ void printGraph(vector<int> adj[], int V)
     }
 }
 
+void MostrarMatriz(int matriz[6][6])
+{
+   // std::cout << "Matriz :" << endl;
+    for (int i = 0; i < 6; i++)
+    {
+        //cout << i << ": ";
+        for (int z = 0; z <6; z++)
+        {
+            cout << matriz[i][z] <<",";
+        }
+
+        cout << endl;
+    }
+}
+
+//matriz para aresta simples 
 void MatrizParaArestaSimple(int matriz[6][6], int tamanho)
 {
     vector<int> adj[tamanho];
@@ -129,27 +151,30 @@ void MatrizParaArestaSimple(int matriz[6][6], int tamanho)
             if (matriz[i][z] != 0)
             {
 
-                addEdge(adj, i, z);
+               AdicionarCaminho(adj, i, z);
             }
         }
     }
-    printGraph(adj, 6);
+    printGrafico(adj, 6);
 }
 
+//Mostrar na tela o grafico , a quantidade de caminhos djintos , os caminhos e o numero de arestas
 void Mostrartela(int matriz[6][6])
 {
-    std::cout << "No Grafo \n"
-              << endl;
+    //std::cout << "No Grafo \n"
+      //        << endl;
     MatrizParaArestaSimple(matriz, 6);
     std::cout << endl;
+    
     int valores[2];
     valores[0] = Pegarvalores(" Qual o Vertice Inicial ");
     valores[1] = Pegarvalores(" Qual o Vertice final ");
-    int quantidadeMaxima = FordFulkeson(matriz, valores, 6);
+    int quantidadeMaxima = Fazerfluxo(matriz, valores, 6);
     std::cout << "A Quantidade maxima de caminhos Dijuntos e " << quantidadeMaxima << endl;
     cout <<"Numero de arestas utilizadas e "<< variavelglobal << endl;
 }
 
+//Funcao main
 int main()
 {
     int matriz[6][6] = {{0, 1, 1, 1, 0, 1},
@@ -158,6 +183,6 @@ int main()
                         {0, 0, 0, 0, 1, 1},
                         {0, 0, 0, 0, 0, 1},
                         {0, 0, 0, 0, 0, 0}};
-
+    MostrarMatriz(matriz);
     Mostrartela(matriz);
 }
